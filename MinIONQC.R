@@ -13,7 +13,8 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(viridis))
 suppressPackageStartupMessages(library(plyr))
 suppressPackageStartupMessages(library(reshape2))
-suppressPackageStartupMessages(library(readr))
+#suppressPackageStartupMessages(library(readr)) ## couldn't install readr on the server
+suppressPackageStartupMessages(library(tibble)) ## loading tibble directly instead
 suppressPackageStartupMessages(library(yaml))
 suppressPackageStartupMessages(library(scales))
 suppressPackageStartupMessages(library(parallel))
@@ -168,7 +169,9 @@ load_summary <- function(filepath, min.q){
     # min.q is a vector of length 2 defining 2 levels of min.q to have
     # by default the lowest value is -Inf, i.e. includes all reads. The 
     # other value in min.q is set by the user at the command line
-    d = read_tsv(filepath, col_types = cols_only(channel = 'i', 
+    options(stringsAsFactors = FALSE)
+    d <- read.table(filepath, sep = "\t", header = TRUE)
+    d <- as_tibble(d, col_types = cols_only(channel = 'i', 
                                                 num_events_template = 'i', 
                                                 sequence_length_template = 'i', 
                                                 mean_qscore_template = 'n',
@@ -176,6 +179,14 @@ load_summary <- function(filepath, min.q){
                                                 mean_qscore_2d = 'n',
                                                 start_time = 'n',
                                                 calibration_strand_genome_template = 'c'))
+    #d = read_tsv(filepath, col_types = cols_only(channel = 'i', 
+    #                                            num_events_template = 'i', 
+    #                                            sequence_length_template = 'i', 
+    #                                            mean_qscore_template = 'n',
+    #                                            sequence_length_2d = 'i',
+    #                                            mean_qscore_2d = 'n',
+    #                                            start_time = 'n',
+    #                                            calibration_strand_genome_template = 'c'))
     
     if(max(d$channel)<=512){
         flog.info("MinION flowcell detected")
