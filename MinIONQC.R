@@ -439,7 +439,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         xlab("Read length (bases)") +
         ylab("Number of reads") +
         guides(fill=FALSE) + scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.75)
-    suppressMessages(ggsave(filename = file.path(output.dir, "length_histogram.png"), width = p1m*960/75, height = p1m*960/75, plot = p1)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "length_histogram.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p1)) #
 
     flog.info(paste(sep = "", flowcell, ": plotting mean Q score histogram"))
     p2 = ggplot(d, aes(x = mean_qscore_template, fill = Q_cutoff)) + 
@@ -449,7 +449,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         xlab("Mean Q score of read") +
         ylab("Number of reads") +
         guides(fill=FALSE) + scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.75)
-    suppressMessages(ggsave(filename = file.path(output.dir, "q_histogram.png"), width = p1m*960/75, height = p1m*960/75, plot = p2)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "q_histogram.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p2)) #
     
     if(max(d$channel)<=512){
         # only do this for minion, not promethion
@@ -465,7 +465,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
             ylab("Read length") +
             theme(text = element_text(size = 40), axis.text.x = element_text(size=12), axis.text.y = element_text(size=12), legend.text=element_text(size=18), legend.title=element_text(size=24))
     
-            suppressMessages(ggsave(filename = file.path(output.dir, "flowcell_overview.png"), width = 2000/75, height = 1920/75, plot = p3))
+            suppressMessages(ggsave(filename = file.path(output.dir, "flowcell_overview.pdf"), width = 2000/75, height = 1920/75, plot = p3))
     }
 
     flog.info(paste(sep = "", flowcell, ": plotting flowcell yield over time"))
@@ -476,7 +476,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         ylab("Total yield in gigabases") +
         scale_colour_viridis(discrete = TRUE, begin = 0.25, end = 0.75, guide = guide_legend(title = "Reads")) +
         theme(text = element_text(size = 15))
-    suppressMessages(ggsave(filename = file.path(output.dir, "yield_over_time.png"), width = p1m*960/75, height = p1m*480/75, plot = p5)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "yield_over_time.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p5)) #
 
 
     flog.info(paste(sep = "", flowcell, ": plotting flowcell yield by read length"))
@@ -488,7 +488,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         theme(text = element_text(size = 15))
     xmax = max(d$sequence_length_template[which(d$cumulative.bases > 0.01 * max(d$cumulative.bases))])
     p6 = p6 + scale_x_continuous(limits = c(0, xmax))
-    suppressMessages(ggsave(filename = file.path(output.dir, "yield_by_length.png"), width = p1m*960/75, height = p1m*480/75, plot = p6)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "yield_by_length.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p6)) #
     
     flog.info(paste(sep = "", flowcell, ": plotting sequence length over time"))
     p7 = ggplot(d, aes(x=start_time/3600, y=sequence_length_template, colour = Q_cutoff, group = Q_cutoff)) + 
@@ -499,7 +499,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         ylab("Mean read length (bases)") + 
         scale_colour_viridis(discrete = TRUE, begin = 0.25, end = 0.75, guide = guide_legend(title = "Reads")) +
         ylim(0, NA)
-    suppressMessages(ggsave(filename = file.path(output.dir, "length_by_hour.png"), width = p1m*960/75, height = p1m*480/75, plot = p7)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "length_by_hour.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p7)) #
     
     flog.info(paste(sep = "", flowcell, ": plotting Q score over time"))
     p8 = ggplot(d, aes(x=start_time/3600, y=mean_qscore_template, colour = Q_cutoff, group = Q_cutoff)) + 
@@ -510,7 +510,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         ylab("Mean Q score") + 
         scale_colour_viridis(discrete = TRUE, begin = 0.25, end = 0.75, guide = guide_legend(title = "Reads")) +
         ylim(0, NA)
-    suppressMessages(ggsave(filename = file.path(output.dir, "q_by_hour.png"), width = p1m*960/75, height = p1m*480/75, plot = p8)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "q_by_hour.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p8)) #
     
     flog.info(paste(sep = "", flowcell, ": plotting reads per hour"))
     f = d[c("hour", "reads_per_hour", "Q_cutoff")]
