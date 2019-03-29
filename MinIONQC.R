@@ -23,8 +23,6 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(optparse))
 
 
-
-
 # option parsing #
 
 parser <- OptionParser()
@@ -542,7 +540,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         ylab("Number of reads per hour") + 
         ylim(0, NA) + 
         scale_colour_viridis(discrete = TRUE, begin = 0.25, end = 0.75, guide = guide_legend(title = "Reads"))
-    suppressMessages(ggsave(filename = file.path(output.dir, "reads_per_hour.png"), width = p1m*960/75, height = p1m*480/75, plot = p9)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "reads_per_hour.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p9)) #
     
     if(max(d$channel)<=512){
         # minion
@@ -571,7 +569,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         p10 = p10 + scale_colour_viridis(trans = "log", labels = scientific, option = 'inferno') 
     }
     # we keep it a bit wider, because the legend takes up a fair bit of the plot space
-    suppressMessages(ggsave(filename = file.path(output.dir, "length_vs_q.png"), width = p2m*960/75, height = p1m*960/75, plot = p10)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "length_vs_q.pdf"), width = p2m*960/75, height = p1m*960/75, plot = p10)) #
     
     flog.info(paste(sep = "", flowcell, ": plotting flowcell channels summary histograms"))
     c = channel.summary(subset(d, Q_cutoff=="All reads"))
@@ -590,7 +588,7 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
         guides(fill=FALSE) +
         scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.75) +
         guides(fill=FALSE)
-    suppressMessages(ggsave(filename = file.path(output.dir, "channel_summary.png"), width = 960/75, height = 480/75, plot = p11)) 
+    suppressMessages(ggsave(filename = file.path(output.dir, "channel_summary.pdf"), width = 960/75, height = 480/75, plot = p11)) 
     
 
     flog.info(paste(sep = "", flowcell, ": plotting physical overview of output per channel"))
@@ -620,10 +618,10 @@ single.flowcell <- function(input.file, output.dir, q=7, base.dir = NA){
 
     if(max(d$channel)<=512){
         # minion
-        suppressMessages(ggsave(filename = file.path(output.dir, "gb_per_channel_overview.png"), width = 960/150, height = 480/75, plot = p12)) 
+        suppressMessages(ggsave(filename = file.path(output.dir, "gb_per_channel_overview.pdf"), width = 960/150, height = 480/75, plot = p12)) 
     }else{
         # promethion
-        suppressMessages(ggsave(filename = file.path(output.dir, "gb_per_channel_overview.png"), width = 960/75, height = 480/75, plot = p12))         
+        suppressMessages(ggsave(filename = file.path(output.dir, "gb_per_channel_overview.pdf"), width = 960/75, height = 480/75, plot = p12))         
     }
     
     return(d)
@@ -684,7 +682,7 @@ combined.flowcell <- function(d, output.dir, q=8){
         xlab("Read length (bases)") +
         ylab("Number of reads") +
         guides(fill=FALSE) + scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.75)
-    suppressMessages(ggsave(filename = file.path(output.dir, "combined_length_histogram.png"), width = p1m*960/75, height = p1m*960/75, plot = p1))
+    suppressMessages(ggsave(filename = file.path(output.dir, "combined_length_histogram.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p1))
     
     flog.info("Plotting combined mean Q score histogram")
     p2 = ggplot(d, aes(x = mean_qscore_template, fill = Q_cutoff)) + 
@@ -694,7 +692,7 @@ combined.flowcell <- function(d, output.dir, q=8){
         xlab("Mean Q score of read") +
         ylab("Number of reads") +
         guides(fill=FALSE) + scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.75)
-    suppressMessages(ggsave(filename = file.path(output.dir, "combined_q_histogram.png"), width = p1m*960/75, height = p1m*960/75, plot = p2))
+    suppressMessages(ggsave(filename = file.path(output.dir, "combined_q_histogram.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p2))
         
     flog.info("Plotting combined yield by length")
     p4 = ggplot(d, aes(x=sequence_length_template, y=cumulative.bases/1000000000, colour = Q_cutoff)) + 
@@ -706,7 +704,7 @@ combined.flowcell <- function(d, output.dir, q=8){
     xmax = max(d$sequence_length_template[which(d$cumulative.bases > 0.01 * max(d$cumulative.bases))])
     p4 = p4 + scale_x_continuous(limits = c(0, xmax))
     
-    suppressMessages(ggsave(filename = file.path(output.dir, "combined_yield_by_length.png"), width = p1m*960/75, height = p1m*480/75, plot = p4))
+    suppressMessages(ggsave(filename = file.path(output.dir, "combined_yield_by_length.pdf"), width = p1m*960/75, height = p1m*480/75, plot = p4))
     
 }
 
@@ -740,7 +738,7 @@ multi.plots = function(dm, output.dir){
         theme(text = element_text(size = 15)) +
         xlab("Read length (bases)") +
         ylab("Density")
-    suppressMessages(ggsave(filename = file.path(output.dir, "length_distributions.png"), width = p1m*960/75, height = p1m*960/75, plot = p1)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "length_distributions.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p1)) #
     
     flog.info("Plotting mean Q score distributions")
     p2 = ggplot(dm, aes(x = mean_qscore_template)) + 
@@ -749,7 +747,7 @@ multi.plots = function(dm, output.dir){
         theme(text = element_text(size = 15)) +
         xlab("Mean Q score of read") +
         ylab("Density")
-    suppressMessages(ggsave(filename = file.path(output.dir, "q_distributions.png"), width = p1m*960/75, height = p1m*960/75, plot = p2)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "q_distributions.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p2)) #
 
 
     flog.info("Plotting flowcell yield over time")
@@ -760,7 +758,7 @@ multi.plots = function(dm, output.dir){
         ylab("Total yield in gigabases") +
         facet_wrap(~Q_cutoff, ncol = 1, scales = "free_y") +
         theme(text = element_text(size = 15))
-    suppressMessages(ggsave(filename = file.path(output.dir, "yield_over_time.png"), width = p1m*960/75, height = p1m*960/75, plot = p5)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "yield_over_time.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p5)) #
 
         
     flog.info("Plotting flowcell yield by length")
@@ -772,7 +770,7 @@ multi.plots = function(dm, output.dir){
         facet_wrap(~Q_cutoff, ncol = 1, scales = "free_y")
     xmax = max(dm$sequence_length_template[which(dm$cumulative.bases > 0.01 * max(dm$cumulative.bases))])
     p6 = p6 + scale_x_continuous(limits = c(0, xmax))
-    suppressMessages(ggsave(filename = file.path(output.dir, "yield_by_length.png"), width = p1m*960/75, height = p1m*960/75, plot = p6)) #
+    suppressMessages(ggsave(filename = file.path(output.dir, "yield_by_length.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p6)) #
     
 
     flog.info("Plotting sequence length over time")
@@ -784,7 +782,7 @@ multi.plots = function(dm, output.dir){
         ylab("Mean read length (bases)") + 
         ylim(0, NA) +
         facet_wrap(~Q_cutoff, ncol = 1, scales = "free_y")
-    suppressMessages(ggsave(filename = file.path(output.dir, "length_by_hour.png"), width = p1m*960/75, height = p1m*960/75, plot = p7))
+    suppressMessages(ggsave(filename = file.path(output.dir, "length_by_hour.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p7))
     
 
     flog.info("Plotting Q score over time")
@@ -795,7 +793,7 @@ multi.plots = function(dm, output.dir){
         xlab("Hours into run") + 
         ylab("Mean Q score") + 
         facet_wrap(~Q_cutoff, ncol = 1, scales = "free_y")
-    suppressMessages(ggsave(filename = file.path(output.dir, "q_by_hour.png"), width = p1m*960/75, height = p1m*960/75, plot = p8))    
+    suppressMessages(ggsave(filename = file.path(output.dir, "q_by_hour.pdf"), width = p1m*960/75, height = p1m*960/75, plot = p8))    
     
 }
 
